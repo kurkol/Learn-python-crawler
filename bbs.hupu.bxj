@@ -1,0 +1,23 @@
+import requests
+from bs4 import BeautifulSoup
+import datetime
+
+information_list = []
+link = 'https://bbs.hupu.com/bxj'
+headers = {'user-agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+r = requests.get(link, headers = headers)
+html = r.content
+html = html.decode('UTF-8')
+soup = BeautifulSoup(html, 'lxml')
+list = soup.find('ul', class_='for-list')
+post_list = list.find_all('li')
+
+for post in post_list:
+	title = post.find('div', class_='titlelink box').a.text.strip()
+	title_link = post.find('div', class_='titlelink box').a['href']
+	author = post.find('div', class_='author box').a.text.strip()
+	author_link = post.find('div', class_='author box').a['href']
+	information_list.append([title, 'https://bbs.hupu.com'+title_link, author, author_link])
+
+print(information_list)
+c=input()
